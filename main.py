@@ -17,18 +17,11 @@ class Node:
         self.h = h
     def __repr__(self):
                 return repr((self.x, self.y, self.g, self.h, self.total()))
-
     def total(self):
         return self.g+self.h
 
 maze = np.zeros((width, height) , dtype=int)
 nodes = np.zeros(0, dtype=Node)
-
-def sortArray(input):
-    output = np.zeros(len(input), dtype=Node)
-    print(output)
-    print(len(input))
-
 
 #initialize maze
 for y in range(height):
@@ -47,7 +40,6 @@ for y in range(height):
                 nodes = np.append(nodes, Node(x, y, 999999, abs(x-end.x)+abs(y-end.y)))
 
 while(1):
-    array = sortArray(nodes)
-    nodes = sorted(nodes, key=lambda node: node.total())
+    sortedArray = sorted(nodes, key=lambda node: node.total())
     print(nodes)
     break
