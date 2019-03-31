@@ -5,8 +5,8 @@ import sys
 filename = str(sys.argv[1])
 im = imageio.imread(filename)
 
-width = im.shape[0]
-height = im.shape[1]
+width = im.shape[1]
+height = im.shape[0]
 #node object
 class Node:
 
@@ -37,7 +37,7 @@ def getSurroundingNodes(input):
     return output
 
 
-maze = np.zeros((width, height) , dtype=int)
+maze = np.zeros((height, width) , dtype=int)
 nodes = np.zeros(0, dtype=Node)
 closed = np.zeros(0, dtype=Node)
 
@@ -77,10 +77,11 @@ print("Found path!")
 currentNode = end
 outputImage = im.copy()
 while(1):
-    outputImage[currentNode.y][currentNode.x] = ["255", "0", "0"]
+    outputImage[currentNode.y][currentNode.x][0] = 255
+    outputImage[currentNode.y][currentNode.x][1] = 0
+    outputImage[currentNode.y][currentNode.x][2] = 0
     currentNode = currentNode.parent
     if(currentNode == start):
-        outputImage[start.y][start.x] = ["255", "0", "0"]
         break
 imageio.imwrite(filename[:-4]+"_output.png", outputImage)
 print("Outputted image as "+filename[:-4]+"_output.png")
