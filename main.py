@@ -62,6 +62,7 @@ while(finished):
     sortedArray = sorted(nodes, key=lambda node: node.total())
     for node in sortedArray:
         if node not in closed:
+            print(node)
             surrounding = getSurroundingNodes(node)
             for surround in surrounding:
                 if(surround.g > node.g+1):
@@ -74,8 +75,12 @@ while(finished):
             break
 print("Found path!")
 currentNode = end
+outputImage = im.copy()
 while(1):
-    print(currentNode.parent)
+    outputImage[currentNode.y][currentNode.x] = ["255", "0", "0"]
     currentNode = currentNode.parent
     if(currentNode == start):
+        outputImage[start.y][start.x] = ["255", "0", "0"]
         break
+imageio.imwrite(filename[:-4]+"_output.png", outputImage)
+print("Outputted image as "+filename[:-4]+"_output.png")
