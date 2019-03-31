@@ -15,6 +15,7 @@ class Node:
         self.y = y
         self.g = g
         self.h = h
+        self.parent = None
     def __repr__(self):
                 return repr((self.x, self.y, self.g, self.h, self.total()))
     def total(self):
@@ -56,7 +57,7 @@ for y in range(height):
                 nodes = np.append(nodes, Node(x, y, 999999, abs(x-end.x)+abs(y-end.y)))
 nodes = sorted(nodes, key=lambda node: node.coords())
 total  = 0
-while(total<500):
+while(1):
     sortedArray = sorted(nodes, key=lambda node: node.total())
     for node in sortedArray:
         if node not in closed:
@@ -64,6 +65,9 @@ while(total<500):
             for surround in surrounding:
                 if(surround.g > node.g+1):
                     surround.g = node.g+1
-            closed = np.append(closed, node)
-            break
-    total += 1
+            surrounding = sorted(surrounding, key=lambda node: node.total())
+            surrounding[0].parent = node
+            if(node == end): #got to the end
+                break
+    else:
+        break
