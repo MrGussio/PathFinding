@@ -19,9 +19,26 @@ class Node:
                 return repr((self.x, self.y, self.g, self.h, self.total()))
     def total(self):
         return self.g+self.h
+    def coords(self):
+        return self.y*width+self.x
+
+def getSurroundingNodes(input):
+    output = []
+    for case in nodes:
+        if(case.x == input.x-1 and case.y == input.y):#left
+            output = np.append(output, case)
+        elif(case.x == input.x+1 and case.y == input.y):#right
+            output = np.append(output, case)
+        elif(case.x == input.x and case.y == input.y-1):#beneath
+            output = np.append(output, case)
+        elif(case.x == input.x and case.y == input.y+1):#above
+            output = np.append(output, case)
+    return output
+
 
 maze = np.zeros((width, height) , dtype=int)
 nodes = np.zeros(0, dtype=Node)
+closed = np.zeros(0, dtype=Node)
 
 #initialize maze
 for y in range(height):
@@ -35,11 +52,18 @@ for y in range(height):
                 print("start!")
             elif(y == height-1): #ending node
                 end = Node(x, y, 999999, 0)
-                nodes = np.append(nodes, end)
             else:
                 nodes = np.append(nodes, Node(x, y, 999999, abs(x-end.x)+abs(y-end.y)))
-
-while(1):
+nodes = sorted(nodes, key=lambda node: node.coords())
+total  = 0
+while(total<500):
     sortedArray = sorted(nodes, key=lambda node: node.total())
-    print(nodes)
-    break
+    for node in sortedArray:
+        if node not in closed:
+            surrounding = getSurroundingNodes(node)
+            for surround in surrounding:
+                if(surround.g > node.g+1):
+                    surround.g = node.g+1
+            closed = np.append(closed, node)
+            break
+    total += 1
