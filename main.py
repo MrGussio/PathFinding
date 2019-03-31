@@ -39,6 +39,7 @@ def getSurroundingNodes(input):
 
 maze = np.zeros((height, width) , dtype=int)
 nodes = np.zeros(0, dtype=Node)
+open = np.zeros(0, dtype=Node)
 closed = np.zeros(0, dtype=Node)
 
 #initialize maze
@@ -56,10 +57,11 @@ for y in range(height):
             else:
                 nodes = np.append(nodes, Node(x, y, 999999, abs(x-end.x)+abs(y-end.y)))
 nodes = sorted(nodes, key=lambda node: node.coords())
+open = nodes
 finished = 1
 print("Search started...")
 while(finished):
-    sortedArray = sorted(nodes, key=lambda node: node.total())
+    sortedArray = sorted(open, key=lambda node: node.total())
     for node in sortedArray:
         if node not in closed:
             print(node)
@@ -72,6 +74,7 @@ while(finished):
                         finished = 0
             surrounding = sorted(surrounding, key=lambda node: node.total())
             closed = np.append(closed, node)
+            open.remove(node)
             break
 print("Found path!")
 currentNode = end
