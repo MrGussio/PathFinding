@@ -50,14 +50,15 @@ for y in range(height):
             if(y == 0): # starting node
                 start = Node(x, y, 0, abs(x-end.x)+abs(y-end.y))
                 nodes = np.append(nodes, start)
-                print("start!")
             elif(y == height-1): #ending node
                 end = Node(x, y, 999999, 0)
+                nodes = np.append(nodes, end)
             else:
                 nodes = np.append(nodes, Node(x, y, 999999, abs(x-end.x)+abs(y-end.y)))
 nodes = sorted(nodes, key=lambda node: node.coords())
-total  = 0
-while(1):
+finished = 1
+print("Search started...")
+while(finished):
     sortedArray = sorted(nodes, key=lambda node: node.total())
     for node in sortedArray:
         if node not in closed:
@@ -65,9 +66,16 @@ while(1):
             for surround in surrounding:
                 if(surround.g > node.g+1):
                     surround.g = node.g+1
+                    surround.parent = node
+                    if(surround.x == end.x and surround.y == end.y): #got to the end
+                        finished = 0
             surrounding = sorted(surrounding, key=lambda node: node.total())
-            surrounding[0].parent = node
-            if(node == end): #got to the end
-                break
-    else:
+            closed = np.append(closed, node)
+            break
+print("Found path!")
+currentNode = end
+while(1):
+    print(currentNode.parent)
+    currentNode = currentNode.parent
+    if(currentNode == start):
         break
